@@ -1,13 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using static System.Formats.Asn1.AsnWriter;
-using System.Xml.Linq;
-using System.Diagnostics;
 
 namespace MonoGame_Testing_2
 {
@@ -22,7 +16,7 @@ namespace MonoGame_Testing_2
         private float rotation_speed;
         private Vector2 velocity;
 
-        private Random random = new Random();
+        private Random random = new();
 
         public Ball1(Texture2D texture, Vector2 position, float scale, float radius, Vector2 direction, float speed)
              : base(texture, position, scale)
@@ -112,10 +106,10 @@ namespace MonoGame_Testing_2
                     var currentRectangle = Rectangle;
 
                     int d = 8; // I added a delta here to make the lines smaller, so no collision should be with both lines at the same time
-                    Rectangle colObjLineTop = new Rectangle(colObjRectangle.X + d, colObjRectangle.Y, colObjRectangle.Width - d*2, 0);
-                    Rectangle colObjLineBot = new Rectangle(colObjRectangle.X + d, colObjRectangle.Bottom, colObjRectangle.Width - d*2, 0);
-                    Rectangle colObjLineLeft = new Rectangle(colObjRectangle.X, colObjRectangle.Y + d, 0, colObjRectangle.Height - d*2);
-                    Rectangle colObjLineRight = new Rectangle(colObjRectangle.Right, colObjRectangle.Y + d, 0, colObjRectangle.Height - d*2);
+                    Rectangle colObjLineTop = new(colObjRectangle.X + d, colObjRectangle.Y, colObjRectangle.Width - d*2, 0);
+                    Rectangle colObjLineBot = new(colObjRectangle.X + d, colObjRectangle.Bottom, colObjRectangle.Width - d*2, 0);
+                    Rectangle colObjLineLeft = new(colObjRectangle.X, colObjRectangle.Y + d, 0, colObjRectangle.Height - d*2);
+                    Rectangle colObjLineRight = new(colObjRectangle.Right, colObjRectangle.Y + d, 0, colObjRectangle.Height - d*2);
 
                     var intersectLineLeft = currentRectangle.Intersects(colObjLineLeft);
                     var intersectLineRight = currentRectangle.Intersects(colObjLineRight);

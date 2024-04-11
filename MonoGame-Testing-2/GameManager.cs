@@ -2,12 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-
 
 namespace MonoGame_Testing_2
 {
-    
+
     internal class GameManager
     {
 
@@ -24,8 +22,8 @@ namespace MonoGame_Testing_2
         #endregion
 
         private readonly UIManager _ui = new();
-        private List<GameObject> gameObjects = new List<GameObject>();
-        private Random random = new Random();
+        private List<GameObject> gameObjects = new();
+        private Random random = new();
 
         public static readonly int[,] tiles =
         {
@@ -36,7 +34,7 @@ namespace MonoGame_Testing_2
             {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1}
         };
 
-        private List<int> indicesToRemove = new List<int>();
+        private List<int> indicesToRemove = new();
 
         public GameManager()
         {
@@ -54,7 +52,7 @@ namespace MonoGame_Testing_2
 
             #endregion
 
-            spawnWorldObjects();
+            SpawnWorldObjects();
         }
 
         public void Action1(object sender, EventArgs e)
@@ -75,12 +73,12 @@ namespace MonoGame_Testing_2
             _ui.Update();
 
             // Spawn a new ball by clicking
-            if (InputManager.mouseRightButtonClicked)
+            if (InputManager.MouseRightButtonClicked)
             {
                 float radius = (float)random.NextDouble() * 60 + 20f;
                 Vector2 direction = ConvertDirectionRadiansToVector2((float)(random.NextDouble() * 2 * Math.PI));
                 float speed = (float)random.NextDouble() * 300 + 100;
-                gameObjects.Add(new Ball1(crystalBall, InputManager.mousePosition, 1, radius, direction, speed));
+                gameObjects.Add(new Ball1(crystalBall, InputManager.MousePosition, 1, radius, direction, speed));
             }
 
             // Update all objects
@@ -99,7 +97,7 @@ namespace MonoGame_Testing_2
 
         public void Draw(GameTime gameTime)
         {
-            
+
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Draw(gameTime, Globals.SpriteBatch);
@@ -117,15 +115,14 @@ namespace MonoGame_Testing_2
             return new Vector2((float)Math.Cos(direction), (float)Math.Sin(direction));
         }
 
-        private void spawnWorldObjects()
+        private void SpawnWorldObjects()
         {
             gameObjects.Add(new Board(board, new Vector2(400, 400), 2, 500));
 
-            _ui.AddButton(new(500, 500), 2).OnClick += Action1;
-            _ui.AddButton(new(200, 600), 3).OnClick += Action2;
-            _ui.AddButton(new(900, 800), 2).OnClick += Action3;
+            _ui.AddButton(new(500, 500), 2, "Button 1").OnClick += Action1;
+            _ui.AddButton(new(200, 600), 3, "Other Button").OnClick += Action2;
+            _ui.AddButton(new(900, 800), 2, "Click Me :)").OnClick += Action3;
 
-            //gameObjects.Add(new Button(button_c4_normal, new Vector2(600, 100), 1));
 
             for (int x = 0; x < tiles.GetLength(0); x++)
             {

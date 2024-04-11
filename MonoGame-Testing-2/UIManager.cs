@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 
 namespace MonoGame_Testing_2
@@ -13,7 +12,7 @@ namespace MonoGame_Testing_2
         private Texture2D button_c4_pressed;
 
         private readonly List<Button> buttons = new();
-        private SpriteFont ui_font { get; }
+        private SpriteFont UIFont { get; }
         public int Counter { get; set; }
 
         public UIManager()
@@ -21,13 +20,13 @@ namespace MonoGame_Testing_2
             button_c4_mouseover = Globals.Content.Load<Texture2D>("button_c4_mouseover");
             button_c4_normal = Globals.Content.Load<Texture2D>("button_c4_normal");
             button_c4_pressed = Globals.Content.Load<Texture2D>("button_c4_pressed");
-            ui_font = Globals.Content.Load<SpriteFont>("ui_font");
+            UIFont = Globals.Content.Load<SpriteFont>("ui_font");
         }
 
-        public Button AddButton(Vector2 position, float scale)
+        public Button AddButton(Vector2 position, float scale, string text)
         {
-            var textureList = new List<Texture2D>() { button_c4_normal, button_c4_mouseover, button_c4_pressed };
-            Button b = new Button(textureList, position, scale);
+            List<Texture2D> textureList = new() { button_c4_normal, button_c4_mouseover, button_c4_pressed };
+            Button b = new(textureList, position, scale, text, UIFont);
             buttons.Add(b);
 
             return b;
@@ -49,7 +48,7 @@ namespace MonoGame_Testing_2
                 item.Draw();
             }
 
-            Globals.SpriteBatch.DrawString(ui_font, Counter.ToString(), new(10, 10), Color.White);
+            Globals.SpriteBatch.DrawString(UIFont, Counter.ToString(), new(10, 10), Color.White);
 
         }
     }

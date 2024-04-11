@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace MonoGame_Testing_2
 {
@@ -10,11 +8,11 @@ namespace MonoGame_Testing_2
     {
 
         private GameManager _gameManager;
-        
+
         public Game1()
         {
             Globals.GraphicsDeviceManager = new GraphicsDeviceManager(this);
-            
+
 
             IsMouseVisible = true;
             IsFixedTimeStep = false;
@@ -36,7 +34,7 @@ namespace MonoGame_Testing_2
 
         protected override void LoadContent()
         {
-            
+
             Globals.Content = new ContentManager(Services, "Content");
 
             _gameManager = new GameManager();
@@ -56,7 +54,7 @@ namespace MonoGame_Testing_2
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            
+
             Globals.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
             _gameManager.Draw(gameTime);

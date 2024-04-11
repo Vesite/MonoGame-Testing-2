@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonoGame_Testing_2
 {
@@ -17,25 +12,25 @@ namespace MonoGame_Testing_2
         public Board(Texture2D texture, Vector2 position, float scale, float speed) : base(texture, position, scale)
         {
             this.speed = speed;
-            
+
         }
 
         public override void Update(GameTime gameTime, List<GameObject> gameObjects, List<int> indicesToRemove)
         {
 
-            if (InputManager.keyLeftHold)
+            if (InputManager.KeyLeftHold)
             {
                 Position = new(Position.X - speed * Globals.Time, Position.Y);
             }
-            if (InputManager.keyRightHold)
+            if (InputManager.KeyRightHold)
             {
                 Position = new(Position.X + speed * Globals.Time, Position.Y);
             }
-            if (InputManager.keyDownHold)
+            if (InputManager.KeyDownHold)
             {
                 Position = new(Position.X, Position.Y + speed * Globals.Time);
             }
-            if (InputManager.keyUpHold)
+            if (InputManager.KeyUpHold)
             {
                 Position = new(Position.X, Position.Y - speed * Globals.Time);
             }
