@@ -19,20 +19,38 @@ namespace MonoGame_Testing_2
         public static Vector2 MousePosition { get; private set; }
         public static Rectangle MouseRectangle { get; private set; }
 
-        public static bool KeyLeftHold { get; private set; }
-        public static bool KeyRightHold { get; private set; }
-        public static bool KeyDownHold { get; private set; }
-        public static bool KeyUpHold { get; private set; }
-        public static bool KeyLeftClicked { get; private set; }
-        public static bool KeyRightClicked { get; private set; }
-        public static bool KeyDownClicked { get; private set; }
-        public static bool KeyUpClicked { get; private set; }
+        //public static bool KeyLeftHold { get; private set; }
+        //public static bool KeyRightHold { get; private set; }
+        //public static bool KeyDownHold { get; private set; }
+        //public static bool KeyUpHold { get; private set; }
+        //public static bool KeyLeftClicked { get; private set; }
+        //public static bool KeyRightClicked { get; private set; }
+        //public static bool KeyDownClicked { get; private set; }
+        //public static bool KeyUpClicked { get; private set; }
 
-        public static bool KeyOClicked { get; private set; }
+        //public static bool KeyOClicked { get; private set; }
+
+
+
+        // Smarter Function
+        public static bool KeyClicked(Keys key)
+        {
+            return (keyState.IsKeyDown(key) && prevKeyState.IsKeyUp(key));
+        }
+
+        public static bool KeyDown(Keys key)
+        {
+            return (keyState.IsKeyDown(key));
+        }
 
         public static void Update()
         {
+
+            // Keyboard states for the functions
+            prevKeyState = keyState;
             keyState = Keyboard.GetState();
+
+
             mouseState = Mouse.GetState();
 
             #region Set Input Variables
@@ -54,41 +72,39 @@ namespace MonoGame_Testing_2
             MouseRectangle = new(mouseState.X, mouseState.Y, 1, 1);
 
 
+            //if ((keyState.IsKeyDown(Keys.Left)) && (prevKeyState.IsKeyUp(Keys.Left)))
+            //    KeyLeftClicked = true;
+            //else
+            //    KeyLeftClicked = false;
 
-            if ((keyState.IsKeyDown(Keys.Left)) && (prevKeyState.IsKeyUp(Keys.Left)))
-                KeyLeftClicked = true;
-            else
-                KeyLeftClicked = false;
+            //if ((keyState.IsKeyDown(Keys.Right)) && (prevKeyState.IsKeyUp(Keys.Right)))
+            //    KeyRightClicked = true;
+            //else
+            //    KeyRightClicked = false;
 
-            if ((keyState.IsKeyDown(Keys.Right)) && (prevKeyState.IsKeyUp(Keys.Right)))
-                KeyRightClicked = true;
-            else
-                KeyRightClicked = false;
+            //if ((keyState.IsKeyDown(Keys.Down)) && (prevKeyState.IsKeyUp(Keys.Down)))
+            //    KeyDownClicked = true;
+            //else
+            //    KeyDownClicked = false;
 
-            if ((keyState.IsKeyDown(Keys.Down)) && (prevKeyState.IsKeyUp(Keys.Down)))
-                KeyDownClicked = true;
-            else
-                KeyDownClicked = false;
+            //if ((keyState.IsKeyDown(Keys.Up)) && (prevKeyState.IsKeyUp(Keys.Up)))
+            //    KeyUpClicked = true;
+            //else
+            //    KeyUpClicked = false;
 
-            if ((keyState.IsKeyDown(Keys.Up)) && (prevKeyState.IsKeyUp(Keys.Up)))
-                KeyUpClicked = true;
-            else
-                KeyUpClicked = false;
-
-            KeyLeftHold = keyState.IsKeyDown(Keys.Left);
-            KeyRightHold = keyState.IsKeyDown(Keys.Right);
-            KeyUpHold = keyState.IsKeyDown(Keys.Up);
-            KeyDownHold = keyState.IsKeyDown(Keys.Down);
+            //KeyLeftHold = keyState.IsKeyDown(Keys.Left);
+            //KeyRightHold = keyState.IsKeyDown(Keys.Right);
+            //KeyUpHold = keyState.IsKeyDown(Keys.Up);
+            //KeyDownHold = keyState.IsKeyDown(Keys.Down);
 
 
-            if ((keyState.IsKeyDown(Keys.O)) && (prevKeyState.IsKeyUp(Keys.O)))
-                KeyOClicked = true;
-            else
-                KeyOClicked = false;
+            //if ((keyState.IsKeyDown(Keys.O)) && (prevKeyState.IsKeyUp(Keys.O)))
+            //    KeyOClicked = true;
+            //else
+            //    KeyOClicked = false;
 
             #endregion
 
-            prevKeyState = keyState;
             prevMouseState = mouseState;
         }
 

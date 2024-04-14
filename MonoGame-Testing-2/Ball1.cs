@@ -10,7 +10,7 @@ namespace MonoGame_Testing_2
         public float radius;
         private Vector2 direction;
         private float speed;
-        
+
 
         private float rotation;
         private float rotation_speed;
@@ -18,8 +18,8 @@ namespace MonoGame_Testing_2
 
         private Random random = new();
 
-        public Ball1(Texture2D texture, Vector2 position, float scale, float radius, Vector2 direction, float speed)
-             : base(texture, position, scale)
+        public Ball1(List<Texture2D> textures, Vector2 position, float scale, float radius, Vector2 direction, float speed)
+             : base(textures, position, scale)
         {
             this.radius = radius;
             this.direction = direction;
@@ -39,15 +39,15 @@ namespace MonoGame_Testing_2
             // Rotation Stuff
             rotation += rotation_speed * Globals.Time;
 
-            float spriteRadius = texture.Width / 2;
+            float spriteRadius = textures[0].Width / 2;
             scale = radius / spriteRadius;
 
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch _spriteBatch)
         {
-            _spriteBatch.Draw(texture,
-                Position, null, Color.White, rotation, new Vector2(texture.Width / 2, texture.Height / 2), scale, SpriteEffects.None, 0f);
+            _spriteBatch.Draw(textures[0],
+                Position, null, Color.White, rotation, new Vector2(textures[0].Width / 2, textures[0].Height / 2), scale, SpriteEffects.None, 0f);
             if (Globals.isDrawingOutline)
                 Globals.DrawOutline(Rectangle);
         }
@@ -106,10 +106,10 @@ namespace MonoGame_Testing_2
                     var currentRectangle = Rectangle;
 
                     int d = 8; // I added a delta here to make the lines smaller, so no collision should be with both lines at the same time
-                    Rectangle colObjLineTop = new(colObjRectangle.X + d, colObjRectangle.Y, colObjRectangle.Width - d*2, 0);
-                    Rectangle colObjLineBot = new(colObjRectangle.X + d, colObjRectangle.Bottom, colObjRectangle.Width - d*2, 0);
-                    Rectangle colObjLineLeft = new(colObjRectangle.X, colObjRectangle.Y + d, 0, colObjRectangle.Height - d*2);
-                    Rectangle colObjLineRight = new(colObjRectangle.Right, colObjRectangle.Y + d, 0, colObjRectangle.Height - d*2);
+                    Rectangle colObjLineTop = new(colObjRectangle.X + d, colObjRectangle.Y, colObjRectangle.Width - d * 2, 0);
+                    Rectangle colObjLineBot = new(colObjRectangle.X + d, colObjRectangle.Bottom, colObjRectangle.Width - d * 2, 0);
+                    Rectangle colObjLineLeft = new(colObjRectangle.X, colObjRectangle.Y + d, 0, colObjRectangle.Height - d * 2);
+                    Rectangle colObjLineRight = new(colObjRectangle.Right, colObjRectangle.Y + d, 0, colObjRectangle.Height - d * 2);
 
                     var intersectLineLeft = currentRectangle.Intersects(colObjLineLeft);
                     var intersectLineRight = currentRectangle.Intersects(colObjLineRight);
@@ -139,9 +139,13 @@ namespace MonoGame_Testing_2
                             nextPosition.Y = colObjRectangle.Y + colObjRectangle.Height + radius + 1;
                         }
 
+
                         if (gameObjects[i] is BlockObject)
                         {
-                            indicesToRemove.Add(i);
+                            if (gameObjects[i].UpdateHP(-1, indicesToRemove))
+                            {
+                                indicesToRemove.Add(i);
+                            }
                         }
 
                         // leave and stop the loop here becuase we had a collision

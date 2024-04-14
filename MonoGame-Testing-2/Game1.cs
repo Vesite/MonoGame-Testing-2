@@ -9,23 +9,35 @@ namespace MonoGame_Testing_2
 
         private GameManager _gameManager;
 
+        // Temp?
+        //GraphicsDeviceManager game1GraphicsDeviceManager;
+
+        public static Texture2D PixelTexture { get; private set; }
+
         public Game1()
         {
-            Globals.GraphicsDeviceManager = new GraphicsDeviceManager(this);
+
+            //game1GraphicsDeviceManager = new GraphicsDeviceManager(this);
+
+            // Initialize the graphics device manager
+            GraphicsDeviceManager graphicsDeviceManager = new GraphicsDeviceManager(this);
+            Globals.GraphicsDeviceManager = graphicsDeviceManager;
 
 
             IsMouseVisible = true;
             IsFixedTimeStep = false;
-
         }
 
         protected override void Initialize()
         {
 
+            // This part needs to go a bit after the "Globals.GraphicsDeviceManager = graphicsDeviceManager;"
+            Globals.GraphicsDevice = Globals.GraphicsDeviceManager.GraphicsDevice;
+
             Globals.SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Globals.GraphicsDeviceManager.PreferredBackBufferWidth = 64 * 15;//GraphicsDevice.DisplayMode.Width;  // set this value to the desired width of your window
-            Globals.GraphicsDeviceManager.PreferredBackBufferHeight = 64 * 15;//GraphicsDevice.DisplayMode.Height;   // set this value to the desired height of your window
+            Globals.GraphicsDeviceManager.PreferredBackBufferWidth = 64 * 15;// Width of window
+            Globals.GraphicsDeviceManager.PreferredBackBufferHeight = 64 * 15; // Height of window
             Globals.GraphicsDeviceManager.IsFullScreen = false;
             Globals.GraphicsDeviceManager.ApplyChanges();
 
@@ -35,9 +47,16 @@ namespace MonoGame_Testing_2
         protected override void LoadContent()
         {
 
+            //graphicsDevice = new GraphicsDeviceManager(this);
+
             Globals.Content = new ContentManager(Services, "Content");
 
+
+            // Get graphics device before this (TEMP)
             _gameManager = new GameManager();
+
+            PixelTexture = new Texture2D(Globals.GraphicsDevice, 1, 1);
+            PixelTexture.SetData(new Color[] { Color.White });
 
         }
 
@@ -55,11 +74,7 @@ namespace MonoGame_Testing_2
         {
             GraphicsDevice.Clear(Color.Black);
 
-            Globals.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
             _gameManager.Draw(gameTime);
-
-            Globals.SpriteBatch.End();
 
             base.Draw(gameTime);
         }

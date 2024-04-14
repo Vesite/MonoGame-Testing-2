@@ -1,23 +1,40 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonoGame_Testing_2
 {
     internal class BlockObject : GameObject
     {
 
-        private int hp;
-
-        public BlockObject(Texture2D texture, Vector2 position, float scale, int hp) : base(texture, position, scale)
+        public BlockObject(List<Texture2D> textures, Vector2 position, float scale, int hp) : base(textures, position, scale)
         {
             this.hp = hp;
+            this.hp_max = hp;
         }
 
+        public override void Draw(GameTime gameTime, SpriteBatch _spriteBatch)
+        {
+
+            base.Draw(gameTime, _spriteBatch);
+
+            // Breaking Texture
+            if (!(hp == hp_max))
+            {
+                if (hp == 1)
+                {
+                    // Draw big cracks
+                    Globals.DrawAtlasImage(_spriteBatch, textures[1], 2, 32, Position, 4, 0);
+                }
+                else if (hp >= 2)
+                {
+                    // Draw small cracks
+                    Globals.DrawAtlasImage(_spriteBatch, textures[1], 2, 32, Position, 1, 0);
+                }
+            }
+
+
+        }
 
     }
 }

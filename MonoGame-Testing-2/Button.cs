@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 
 namespace MonoGame_Testing_2
 {
@@ -14,20 +10,39 @@ namespace MonoGame_Testing_2
         protected List<Texture2D> textures;
         public Vector2 Position { get; set; }
         private SpriteFont font { get; }
-        
+
         private int imageIndex = 0;
-        private float scale;
+        private int scale;
+        private int width;
+        private int height;
+
         private string text;
         private bool buttonPressedDown = false;
-        public Rectangle Rectangle => new((int)(Position.X - textures[0].Width * scale / 2), (int)(Position.Y - textures[0].Height * scale / 2), (int)(textures[0].Width * scale), (int)(textures[0].Height * scale));
+        private int textYOffset = 0;
 
-        public Button(List<Texture2D> texture, Vector2 position, float scale, string text, SpriteFont font)
+        private Rectangle[] sourcePatches;
+        private Rectangle[] destinationPatches;
+
+        public Rectangle Rectangle => new((int)(Position.X - width * scale / 2), (int)(Position.Y - height * scale / 2), (int)(width * scale), (int)(height * scale));
+
+
+        public Button(List<Texture2D> texture, Vector2 position, string text, SpriteFont font, int scale, int width, int height)
         {
             this.textures = texture;
             Position = position;
-            this.scale = scale;
             this.text = text;
             this.font = font;
+            this.scale = scale;
+            this.width = width;
+            this.height = height;
+
+            // This is the parts of the sprite we are "taking" to draw 9slice
+            Rectangle spriteRectangle = new Rectangle(0, 0, textures[imageIndex].Width, textures[imageIndex].Height);
+            sourcePatches = CreatePatches(spriteRectangle, 9, 9, 6, 8, 1);
+
+            // This are the areas in the game where we are drawing
+            destinationPatches = CreatePatches(Rectangle, 9, 9, 6, 8, scale);
+
         }
 
         public void Update()
@@ -55,6 +70,11 @@ namespace MonoGame_Testing_2
             if (buttonPressedDown)
             {
                 imageIndex = 2;
+                textYOffset = 1 * scale;
+            }
+            else
+            {
+                textYOffset = 0;
             }
         }
 
@@ -67,15 +87,54 @@ namespace MonoGame_Testing_2
 
         public void Draw()
         {
-            Globals.SpriteBatch.Draw(textures[imageIndex], Position, null, Color.White, 0f, new Vector2(textures[0].Width / 2, textures[0].Height / 2), scale, SpriteEffects.None, 0f);
 
-            Globals.DrawStringCentered(Globals.SpriteBatch, font, text, Position, Color.White);
-            //Globals.SpriteBatch.DrawString(font, text, Position, Color.White);
+            for (var i = 0; i < 9; i++)
+            {
+                Globals.SpriteBatch.Draw(textures[imageIndex], destinationPatches[i],
+                    sourcePatches[i], Color.White);
+            }
 
-            if (Globals.isDrawingOutline) {
+            Globals.DrawStringCentered(Globals.SpriteBatch, font, text, new(Position.X, Position.Y + textYOffset), Color.White);
+
+            if (Globals.isDrawingOutline)
+            {
                 Globals.DrawOutline(Rectangle);
             }
-            
+
         }
+
+        private Rectangle[] CreatePatches(Rectangle rectangle, int leftPadding, int rightPadding, int topPadding, int bottomPadding, int scale)
+        {
+
+            leftPadding = leftPadding * scale;
+            rightPadding = rightPadding * scale;
+            topPadding = topPadding * scale;
+            bottomPadding = bottomPadding * scale;
+
+            var x = rectangle.X;
+            var y = rectangle.Y;
+            var w = rectangle.Width;
+            var h = rectangle.Height;
+            var middleWidth = w - leftPadding - rightPadding;
+            var middleHeight = h - topPadding - bottomPadding;
+            var bottomY = y + h - bottomPadding;
+            var rightX = x + w - rightPadding;
+            var leftX = x + leftPadding;
+            var topY = y + topPadding;
+            var patches = new[]
+            {
+                new Rectangle(x,      y,        leftPadding,  topPadding),      // top left
+                new Rectangle(leftX,  y,        middleWidth,  topPadding),      // top middle
+                new Rectangle(rightX, y,        rightPadding, topPadding),      // top right
+                new Rectangle(x,      topY,     leftPadding,  middleHeight),    // left middle
+                new Rectangle(leftX,  topY,     middleWidth,  middleHeight),    // middle
+                new Rectangle(rightX, topY,     rightPadding, middleHeight),    // right middle
+                new Rectangle(x,      bottomY,  leftPadding,  bottomPadding),   // bottom left
+                new Rectangle(leftX,  bottomY,  middleWidth,  bottomPadding),   // bottom middle
+                new Rectangle(rightX, bottomY,  rightPadding, bottomPadding)    // bottom right
+            };
+            return patches;
+        }
+
     }
 }

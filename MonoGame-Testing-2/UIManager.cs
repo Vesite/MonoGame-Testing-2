@@ -10,9 +10,12 @@ namespace MonoGame_Testing_2
         private Texture2D button_c4_mouseover;
         private Texture2D button_c4_normal;
         private Texture2D button_c4_pressed;
+        private SpriteFont UIFont { get; }
+
 
         private readonly List<Button> buttons = new();
-        private SpriteFont UIFont { get; }
+
+
         public int Counter { get; set; }
 
         public UIManager()
@@ -23,10 +26,10 @@ namespace MonoGame_Testing_2
             UIFont = Globals.Content.Load<SpriteFont>("ui_font");
         }
 
-        public Button AddButton(Vector2 position, float scale, string text)
+        public Button AddButton(Vector2 position, string text, int scale, int width, int height)
         {
             List<Texture2D> textureList = new() { button_c4_normal, button_c4_mouseover, button_c4_pressed };
-            Button b = new(textureList, position, scale, text, UIFont);
+            Button b = new(textureList, position, text, UIFont, scale, width, height);
             buttons.Add(b);
 
             return b;
@@ -39,7 +42,6 @@ namespace MonoGame_Testing_2
                 item.Update();
             }
         }
-
 
         public void Draw()
         {
